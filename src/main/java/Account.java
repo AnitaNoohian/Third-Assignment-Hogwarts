@@ -1,14 +1,18 @@
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Account implements AccountManagement{
+
     private String username;
     // TODO: Passwords should hashed
     private String password;
     private UUID accountID;
-
+   // HashMap<UUID, Account> hashMap;
     public Account(String username, String password){
         this.password = password;
         this.username = username;
+        this.accountID = UUID.randomUUID();
+    //    this.hashMap = new HashMap<>();
     }
     private String hashPassword(String password){
         long mod = 1000000009, mabna = 203,
@@ -34,5 +38,11 @@ public class Account implements AccountManagement{
     @Override
     public void changePassword(String newPassword) {
         this.password = newPassword;
+    }
+    public String getUsername(){
+        return username;
+    }
+    public UUID getAccountID(){
+        return accountID;
     }
 }
