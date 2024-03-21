@@ -7,14 +7,16 @@ public class Courses {
      private String courseName;
      private String courseDetail;
      private UUID courseID;
-     private List<Student> students;
-     public static HashMap<String,Double> scores;
+     public HashMap<UUID,Student> students;
+     public HashMap<UUID,Double> scores;
      private String teacherName;
 
      public Courses(String courseName, String courseDetail){
          this.courseDetail = courseDetail;
          this.courseName = courseName;
-         courseID = UUID.randomUUID();
+         this.students = new HashMap<>();
+         this.courseID = UUID.randomUUID();
+         this.scores = new HashMap<>();
      }
 
      public void setTeacherName(String name){
@@ -24,12 +26,12 @@ public class Courses {
          return teacherName;
      }
      public void addStudent(Student student){
-         students.add(student);
+         students.put(student.getAccountID(),student);
      }
-     public List<String> getStudents(){
-         List<String> studentName = new ArrayList<>();
-         for(int i = 0; i < students.size(); i++){
-             studentName.add(students.get(i).getUsername());
+     public HashMap<UUID,String> getStudents(){
+         HashMap<UUID,String> studentName = new HashMap<>();
+         for (UUID key : students.keySet()){
+             studentName.put(key,students.get(key).getUsername());
          }
          return studentName;
      }

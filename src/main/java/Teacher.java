@@ -40,18 +40,24 @@ public class Teacher extends Account{
         List<UUID> keys = new ArrayList<>(coursesName.keySet());
         UUID course = keys.get(input-1);
         for (UUID key : Hogwarts.allCourses.keySet()) {
+            HashMap<UUID,String> output = Hogwarts.allCourses.get(key).getStudents();
             if (key == course) {
-                System.out.println("Please choose the student:");
-                Hogwarts.allCourses.get(key).getStudents();
+                System.out.println("Please choose the student(enter the number):");
+                num = 1;
+                for (String value : output.values()){
+                    System.out.println(num + ")" + value);
+                    num++;
+                }
             }
-            String name;
             Scanner inputName = new Scanner(System.in);
-            name = inputName.next();
+            input = inputName.nextInt();
+            List<UUID> keys1 = new ArrayList<>(output.keySet());
+            UUID student = keys1.get(input-1);
             System.out.println("Enter the score of the student:");
             double score;
             Scanner inputScore = new Scanner(System.in);
             score = inputScore.nextDouble();
-            Courses.scores.put(name,score);
+            Hogwarts.allCourses.get(course).scores.put(student,score);
         }
     }
     public List<String> listofCourses(){
@@ -63,7 +69,11 @@ public class Teacher extends Account{
     }
 
     public List<String> studentsInCourse(Courses course){
-        return course.getStudents();
+        List<String> students = new ArrayList<>();
+        for (Student value : course.students.values()) {
+            students.add(value.getUsername());
+        }
+        return students;
     }
 
     public void score(){

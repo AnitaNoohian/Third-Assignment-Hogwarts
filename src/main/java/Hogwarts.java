@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Hogwarts {
 
     // TODO: Define Attributes
-    public static List<Assistant> allAssistants = new ArrayList<>();
+    public static HashMap<UUID, Assistant> allAssistants = new HashMap<>();
     public static HashMap<UUID, Teacher> allTeachers = new HashMap<>();
     public static HashMap<UUID, Student> allStudents = new HashMap<>();
     public static HashMap<UUID, Courses> allCourses = new HashMap<>();
