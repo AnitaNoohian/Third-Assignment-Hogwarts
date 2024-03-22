@@ -28,9 +28,9 @@ After all this points i said and the partial problems i solved when coding, in s
 I made a headmaster (username:**Anita**, password:**1234**) to start a code with.
 when you want to add a student, you should log in with the assistant and choose **create an account** to enter the student information and when you sign up a student with username and password, the student can enter the website with that particular user and pass and use all the features we have for students in the web.  
 For log in as a teacher, first you should sign up. when you enter the information, the request send for the assistants and if one of the assistants accept the request, the teacher could log in with the user and pass that he/she sign up with.  
-Only assistant can make a course and after they make it a student or teacher can get course in **take a course** part in their profiles. when they get a course, the request send to assistants and if one of them accept that the teacher will be a techer of the course or the student can have the course.
-Just assistants can create a new assistant account and remove the users from website.
-Both teachers and students can leave a comment and rate teachers.   
+Only assistant can make a course and after they make it a student or teacher can get course in **take a course** part in their profiles. when they get a course, the request send to assistants and if one of them accept that the teacher will be a techer of the course or the student can have the course.  
+Just assistants can create a new assistant account and remove the users from website.  
+Both teachers and students can leave a comment and rate teachers.     
 Teachers can grade students in the courses they teach and students can see their scores of each course in their profiles.  
-Assistants can see the list of courses and the information about them like the teacher's name and the list of the students.
+Assistants can see the list of courses and the information about them like the teacher's name and the list of the students.  
 Assistants also can see the ID of the users in the **Show Profile** part of the web.
