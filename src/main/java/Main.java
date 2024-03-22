@@ -91,17 +91,47 @@ public class Main {
                 }
 
             } else if (choose == 2) {
-                for (int i = 0; i < Assistant.requests.size(); i++) {
-                    System.out.println(i + 1 + ")" + Assistant.requests.get(i).getUsername());
-                }
-                if (!Assistant.requests.isEmpty()) {
-                    System.out.println("Enter the number of the user you want to accept the request:");
-                    int req = input.nextInt();
-                    Hogwarts.allTeachers.put(Assistant.requests.get(req - 1).getAccountID(), Assistant.requests.get(req - 1));
-                    Assistant.requests.remove(req - 1);
-                }
-                else {
-                    System.out.println("There is no request.\n");
+                System.out.println("1.Teacher's Requests \t2.Be a course's teacher \t3.take course as a student");
+                Scanner in = new Scanner(System.in);
+                int request = in.nextInt();
+                if (request == 1) {
+                    for (int i = 0; i < Assistant.requests.size(); i++) {
+                        System.out.println(i + 1 + ")" + Assistant.requests.get(i).getUsername());
+                    }
+                    if (!Assistant.requests.isEmpty()) {
+                        System.out.println("Enter the number of the user you want to accept the request:");
+                        int req = input.nextInt();
+                        Hogwarts.allTeachers.put(Assistant.requests.get(req - 1).getAccountID(), Assistant.requests.get(req - 1));
+                        Assistant.requests.remove(req - 1);
+                    } else {
+                        System.out.println("There is no request.\n");
+                    }
+                } else if (request == 2){
+                    for (int i = 0; i < Assistant.teacher.size(); i++) {
+                        System.out.println((i+1) + ")" + Assistant.teacher.get(i).getUsername() + " : " + Assistant.teacherReq.get(i).getCourseName());
+                    }
+                    if (!Assistant.teacher.isEmpty()) {
+                        System.out.println("Enter the number of the user you want to accept the request:");
+                        int req = input.nextInt();
+                        Assistant.teacher.get(req-1).takeCourse(Assistant.teacherReq.get(req-1).getCourseID());
+                        Assistant.teacher.remove(req - 1);
+                        Assistant.teacherReq.remove(req - 1);
+                    } else {
+                        System.out.println("There is no request.\n");
+                    }
+                } else if (request == 3) {
+                    for (int i = 0; i < Assistant.student.size(); i++) {
+                        System.out.println((i+1) + ")" + Assistant.student.get(i).getUsername() + " : " + Assistant.studentReq.get(i).getCourseName());
+                    }
+                    if (!Assistant.student.isEmpty()) {
+                        System.out.println("Enter the number of the user you want to accept the request:");
+                        int req = input.nextInt();
+                        Assistant.student.get(req-1).addCourse(Assistant.studentReq.get(req-1), Assistant.student.get(req-1));
+                        Assistant.student.remove(req-1);
+                        Assistant.studentReq.remove(req-1);
+                    }
+                } else {
+                    System.out.println("You entered the wrong number!\n");
                 }
             } else if (choose == 3) {
                 System.out.println("Which profile you want to remove?\n1.A Teacher\t2.A Student\t3.A Assistant");
@@ -110,7 +140,7 @@ public class Main {
                 if (remove == 1){
                     int num = 1;
                     for (Teacher value : Hogwarts.allTeachers.values()) {
-                        System.out.print(num + ")" + value.getUsername());
+                        System.out.println(num + ")" + value.getUsername());
                         num++;
                     }
                     int rem = in.nextInt();
@@ -118,39 +148,39 @@ public class Main {
                     UUID uuid = keys.get(rem-1);
                     String name = Hogwarts.allTeachers.get(uuid).getUsername();
                     Hogwarts.allTeachers.remove(uuid);
-                    for (Teacher value : Hogwarts.allTeachers.values()){
-                        if (uuid == value.getAccountID()){
-                            Hogwarts.allTeachers.remove(uuid);
-                        }
-                    }
+//                    for (Teacher value : Hogwarts.allTeachers.values()){
+//                        if (uuid == value.getAccountID()){
+//                            Hogwarts.allTeachers.remove(uuid);
+//                        }
+//                    }
                     for (Student value : Hogwarts.allStudents.values()){
                         for (UUID key : value.teachers.keySet()){
                             if (key == uuid){
-                                value.teachers.remove(uuid);
+                                value.teachers.remove(key);
                             }
                         }
                         for (int i = 0; i < value.courses.size(); i++){
-                            if (name.equals(value.courses.get(i).getCourseName())){
+                            if (name.equals(value.courses.get(i).getTeacherName())){
                                 value.courses.get(i).setTeacherName(null);
                             }
                         }
                     }
                     for (Courses value : Hogwarts.allCourses.values()){
-                        if (name.equals(value.getCourseName())){
+                        if (name.equals(value.getTeacherName())){
                             value.setTeacherName(null);
                         }
-                        for (Student value2 : value.students.values()){
-                            for (UUID key : value2.teachers.keySet()){
-                                if (key == uuid){
-                                    value2.teachers.remove(uuid);
-                                }
-                            }
-                            for (int i = 0; i < value2.courses.size(); i++){
-                                if (name.equals(value2.courses.get(i).getCourseName())){
-                                    value2.courses.get(i).setTeacherName(null);
-                                }
-                            }
-                        }
+//                        for (Student value2 : value.students.values()){
+//                            for (UUID key : value2.teachers.keySet()){
+//                                if (key == uuid){
+//                                    value2.teachers.remove(uuid);
+//                                }
+//                            }
+//                            for (int i = 0; i < value2.courses.size(); i++){
+//                                if (name.equals(value2.courses.get(i).getCourseName())){
+//                                    value2.courses.get(i).setTeacherName(null);
+//                                }
+//                            }
+//                        }
                     }
                 } else if (remove == 2){
                     int num = 1;
@@ -222,7 +252,8 @@ public class Main {
                     System.out.println("Choose one teacher:(enter a number)");
                     int num = 1;
                     for (Teacher value : Hogwarts.allTeachers.values()) {
-                        System.out.print((num+1) + ")" + value.getUsername());
+                        System.out.println(num + ")" + value.getUsername());
+                        num++;
                     }
                     int pro1 = in.nextInt();
                     List<UUID> keys = new ArrayList<>(Hogwarts.allTeachers.keySet());
@@ -230,15 +261,25 @@ public class Main {
                     Teacher teacher = Hogwarts.allTeachers.get(uuid);
                     System.out.println("There is the information about \"" + teacher.getUsername() + "\" :");
                     System.out.println("ID : " + teacher.getAccountID());
-                    System.out.println("The classes he/she is the teacher of: " + teacher.getCourse());
+                    System.out.print("The classes he/she is the teacher of: ");
+                    int i = 1;
+                    for (String value : teacher.getCourse().values()){
+                        if (i != teacher.getCourse().size()) {
+                            System.out.print(value + ",");
+                            i++;
+                        } else {
+                            System.out.println(value);
+                        }
+                    }
                 } else {
                     System.out.println("Choose one Student:(enter a number)");
                     int num = 1;
                     for (Student value : Hogwarts.allStudents.values()) {
-                        System.out.print((num+1) + ")" + value.getUsername());
+                        System.out.println(num + ")" + value.getUsername());
+                        num++;
                     }
                     int pro1 = in.nextInt();
-                    List<UUID> keys = new ArrayList<>(Hogwarts.allTeachers.keySet());
+                    List<UUID> keys = new ArrayList<>(Hogwarts.allStudents.keySet());
                     UUID uuid = keys.get(pro1-1);
                     Student student = Hogwarts.allStudents.get(uuid);
                     System.out.println("There is the information about \"" + student.getUsername() + "\" :");
@@ -249,29 +290,30 @@ public class Main {
                 List<String> courses = new ArrayList<>();
                 List<String> details = new ArrayList<>();
                 List<String> teachers = new ArrayList<>();
-                List<String> studentsName = new ArrayList<>();
+                List<List<String>> studentsName = new ArrayList<>();
 
                 for (UUID key : Hogwarts.allCourses.keySet()){
                     courses.add(Hogwarts.allCourses.get(key).getCourseName());
                     details.add(Hogwarts.allCourses.get(key).getCourseDetail());
                     teachers.add(Hogwarts.allCourses.get(key).getTeacherName());
-                    HashMap<UUID,String> students = Hogwarts.allCourses.get(key).getStudents();
-                    for (String value : students.values()) {
-                        studentsName.add(value);
-                    }
+                    List<String> student = new ArrayList<>();
+                    HashMap<UUID, String> students = Hogwarts.allCourses.get(key).getStudents();
+                    student.addAll(students.values());
+                    studentsName.add(student);
+                    students.clear();
                 }
                 for (int i = 1; i <= Hogwarts.allCourses.size(); i++){
                     System.out.println(i + ")" + courses.get(i-1) + ": " + details.get(i-1));
                     if (teachers.get(i-1) != null){
                         System.out.println("The teacher who presents the lesson is \"" + teachers.get(i-1) + "\"");
                     }
-                    if (studentsName.get(i-1) != null){
+                    if (studentsName.get(i - 1) != null) {
                         System.out.print("The list of students who takes this course is \"");
-                        for (int j = 0; j < studentsName.size(); j++){
-                            if (j != studentsName.size() - 1) {
-                                System.out.print(studentsName.get(j));
+                        for (int j = 0; j < studentsName.get(i-1).size(); j++) {
+                            if (j != studentsName.get(i-1).size() - 1) {
+                                System.out.print(studentsName.get(i-1).get(j) + ",");
                             } else {
-                                System.out.print(studentsName.get(j) + ",");
+                                System.out.print(studentsName.get(i-1).get(j));
                             }
                         }
                         System.out.println("\"");
@@ -294,8 +336,8 @@ public class Main {
     }
     public static void teacherFeature(Teacher teacher){
         while (true){
-            System.out.println("What do you want to do?\n1.Take Course\t2.My Courses\t3.Score Students" +
-                    "\n4.My Score\t5.Setting\t6.Log out");
+            System.out.println("What do you want to do?\n1.Take Course\t2.My Courses\t3.Score Students\t4.My Score" +
+                    "\n5.Rating\t6.Setting\t7.Log out");
             Scanner input = new Scanner(System.in);
             int choose = input.nextInt();
             if (choose == 1){
@@ -311,7 +353,19 @@ public class Main {
                     int course = input.nextInt();
                     List<UUID> keys = new ArrayList<>(Hogwarts.allCourses.keySet());
                     UUID in = keys.get(course - 1);
-                    teacher.takeCourse(Hogwarts.allCourses.get(in).getCourseName());
+                    boolean check = true;
+                    for (int i = 0; i < teacher.courses.size(); i++) {
+                        if (in == teacher.courses.get(i).getCourseID()){
+                            System.out.println("You already take this course!");
+                            check = false;
+                        }
+                    }
+                    if (check) {
+                        System.out.println("The request send to the assistant. if the assistant accept your request ou will be the teacher of the course\n" +
+                                "and you can see the name of your course in \"My Courses\".\n");
+                        Assistant.teacher.add(teacher);
+                        Assistant.teacherReq.add(Hogwarts.allCourses.get(in));
+                    }
                 }
             } else if (choose == 2){
                 List<String> output = teacher.listofCourses();
@@ -320,11 +374,74 @@ public class Main {
                 } else {
                     System.out.println(output);
                 }
-            } else if (choose == 3){
+            } else if (choose == 3) {
                 teacher.scoreStudent();
-            } else if (choose == 4){
-
-            } else if (choose == 5){
+            } else if (choose == 4) {
+                System.out.println("What do you want to see?\n1.Your score in a course\t2.Comments about you");
+                Scanner in = new Scanner(System.in);
+                int rate = in.nextInt();
+                if (rate == 1) {
+                    System.out.println("Which course score do you want to see?");
+                    for (int i = 0; i < teacher.courses.size(); i++){
+                        System.out.println((i+1) + ")" + teacher.courses.get(i).getCourseName());
+                    }
+                    int com = in.nextInt();
+                    UUID uuid = teacher.courses.get(com-1).getCourseID();
+                    System.out.println(Hogwarts.showRate(teacher,uuid));
+                } else if (rate == 2) {
+                    System.out.println(Hogwarts.showComment(teacher));
+                } else {
+                    System.out.println("You entered a wrong number!");
+                }
+            } else if (choose == 5) {
+                System.out.println("What do you want to do?\n1.Rate a teacher\t2.leave a comment");
+                Scanner in = new Scanner(System.in);
+                int rate = in.nextInt();
+                if (rate == 1){
+                    System.out.println("Which teacher do you want to leave comment for?");
+                    int num = 1;
+                    for (Teacher value : Hogwarts.allTeachers.values()){
+                        System.out.println(num + ")" + value.getUsername());
+                        num++;
+                    }
+                    int com = in.nextInt();
+                    List<UUID> keys = new ArrayList<>(Hogwarts.allTeachers.keySet());
+                    UUID uuid = keys.get(com-1);
+                    Teacher teacher1 = Hogwarts.allTeachers.get(uuid);
+                    if (!teacher1.courses.isEmpty()) {
+                        System.out.println("For which course do you want to rate this teacher?");
+                        for (int i = 0; i < teacher1.courses.size(); i++) {
+                            System.out.println((i + 1) + ")" + teacher1.courses.get(i).getCourseName());
+                        }
+                        int rating = in.nextInt();
+                        UUID courseID = teacher1.courses.get(rating - 1).getCourseID();
+                        System.out.println("What score would you give to this teacher in this course between 1 to 10?");
+                        int score = in.nextInt();
+                        Hogwarts.addRate(teacher1, courseID, score);
+                    } else {
+                        System.out.println("This teacher has not taken the course yet!\n");
+                    }
+                } else if (rate == 2){
+                    System.out.println("Which teacher do you want to leave comment for?");
+                    int num = 1;
+                    for (Teacher value : Hogwarts.allTeachers.values()){
+                        System.out.println(num + ")" + value.getUsername());
+                        num++;
+                    }
+                    int com = in.nextInt();
+                    List<UUID> keys = new ArrayList<>(Hogwarts.allTeachers.keySet());
+                    UUID uuid = keys.get(com-1);
+                    Teacher teacher1 = Hogwarts.allTeachers.get(uuid);
+                    System.out.println("Write your comment:");
+                    Scanner in1 = new Scanner(System.in);
+                    String comment = in1.nextLine();
+                    Hogwarts.addComment(teacher1,comment);
+                    System.out.println("Thanks for leave a comment.\n" +
+                            "it will show to the user without your name being specified!\n");
+                } else {
+                    System.out.println("You entered a wrong number!\n");
+                }
+            } else if (choose == 6) {
                 System.out.println("Username : " + teacher.getUsername());
                 System.out.println("1.Change username\t2.Change Password");
                 int in = input.nextInt();
@@ -340,13 +457,13 @@ public class Main {
                         }
                     }
                     for (Courses value : Hogwarts.allCourses.values()){
-                        if (saveUser.equals(value.getCourseName())){
+                        if (saveUser.equals(value.getTeacherName())){
                             value.setTeacherName(newUser);
                         }
                         for (Student value1 : value.students.values()){
                             for (UUID key : value1.teachers.keySet()){
                                 if (key == user){
-                                    value1.teachers.get(key).replace(saveUser,newUser);
+                                    value1.teachers.replace(key,saveUser,newUser);
                                 }
                             }
                         }
@@ -354,7 +471,7 @@ public class Main {
                     for (Student value : Hogwarts.allStudents.values()){
                         for (UUID key : value.teachers.keySet()){
                             if (key == user){
-                                value.teachers.get(key).replace(saveUser,newUser);
+                                value.teachers.replace(key,saveUser,newUser);
                             }
                         }
                     }
@@ -366,7 +483,7 @@ public class Main {
                 } else {
                     System.out.println("You entered the wrong number!\n");
                 }
-            } else if (choose == 6){
+            } else if (choose == 7){
                 break;
             } else {
                 System.out.println("You entered the wrong number!\n");
@@ -433,7 +550,7 @@ public class Main {
                 }
                 System.out.println("There is no such username and password in the hogwarts:(\n");
             } else if (in == 2) {
-
+                break main;
             } else {
                 System.out.println("You entered the wrong number!\n");
             }
@@ -442,7 +559,7 @@ public class Main {
     public static void studentFeatures(Student student){
         while (true) {
             System.out.println("What do you want to do?\n1.Take Course\t2.My Courses\t3.My Teachers\t4.Quiz\n" +
-                    "5.My score\t6.Setting\t7.Log out");
+                    "5.My score\t6.Rating\t7.Setting\t8.Log out");
             Scanner input = new Scanner(System.in);
             int choose = input.nextInt();
             if (choose == 1) {
@@ -458,14 +575,19 @@ public class Main {
                     int course = input.nextInt();
                     List<UUID> keys = new ArrayList<>(Hogwarts.allCourses.keySet());
                     UUID in = keys.get(course - 1);
+                    boolean check = true;
                     for (int i = 0; i < student.courses.size(); i++){
                         if (in == student.courses.get(i).getCourseID()){
                             System.out.println("You already take this course!");
-                        } else {
-                            student.addCourse(Hogwarts.allCourses.get(in), student);
+                            check = false;
                         }
                     }
-
+                    if (check) {
+                        System.out.println("The request is send for the Assistant. if the assistant accept your request,\n" +
+                                "this course add to your courses and you can see it in \"My Courses\".\n");
+                        Assistant.studentReq.add(Hogwarts.allCourses.get(in));
+                        Assistant.student.add(student);
+                    }
                 }
             } else if (choose == 2) {
                 List<String> output = student.getCourses();
@@ -480,21 +602,74 @@ public class Main {
                     System.out.println("The list is empty!\n");
                 } else {
                     System.out.println(output);
+                    output.clear();
                 }
             } else if (choose == 4) {
                 student.quiz();
             } else if (choose == 5) {
                 System.out.println("Which course's score do you want to see?(enter the number of course)");
                 int num = 1;
-                for (int i = 0; i < student.getCourses().size(); i++){
+                for (int i = 0; i < student.getCourses().size(); i++) {
                     System.out.println(num + ")" + student.getCourses().get(i));
+                    num++;
                 }
+                System.out.println("0)back to the menu");
                 Scanner in = new Scanner(System.in);
-                int course = in.nextInt();
-                Courses name = student.courses.get(course-1);
-                UUID uuid = student.courses.get(course-1).getCourseID();
-                System.out.println(name.scores.get(uuid));
+                int input1 = in.nextInt();
+                if (input1 != 0) {
+                    UUID uuid = student.courses.get(input1 - 1).getCourseID();
+                    System.out.println(Hogwarts.allCourses.get(uuid).scores.get(student.getAccountID()));
+                }
             } else if (choose == 6) {
+                System.out.println("What do you want to do?\n1.Rate a teacher\t2.leave a comment");
+                Scanner in = new Scanner(System.in);
+                int rate = in.nextInt();
+                if (rate == 1){
+                    System.out.println("Which teacher do you want to leave comment for?");
+                    int num = 1;
+                    for (Teacher value : Hogwarts.allTeachers.values()){
+                        System.out.println(num + ")" + value.getUsername());
+                        num++;
+                    }
+                    int com = in.nextInt();
+                    List<UUID> keys = new ArrayList<>(Hogwarts.allTeachers.keySet());
+                    UUID uuid = keys.get(com-1);
+                    Teacher teacher = Hogwarts.allTeachers.get(uuid);
+                    if (!teacher.courses.isEmpty()) {
+                        System.out.println("For which course do you want to rate this teacher?");
+                        for (int i = 0; i < teacher.courses.size(); i++) {
+                            System.out.println((i + 1) + ")" + teacher.courses.get(i).getCourseName());
+                        }
+                        int rating = in.nextInt();
+                        UUID courseID = teacher.courses.get(rating-1).getCourseID();
+                        System.out.println("What score would you give to this teacher in this course between 1 to 10?");
+                        int score = in.nextInt();
+                        Hogwarts.addRate(teacher,courseID,score);
+                    }
+                    else {
+                        System.out.println("This teacher has not taken the course yet!\n");
+                    }
+                } else if (rate == 2){
+                    System.out.println("Which teacher do you want to leave comment for?");
+                    int num = 1;
+                    for (Teacher value : Hogwarts.allTeachers.values()){
+                        System.out.println(num + ")" + value.getUsername());
+                        num++;
+                    }
+                    int com = in.nextInt();
+                    List<UUID> keys = new ArrayList<>(Hogwarts.allTeachers.keySet());
+                    UUID uuid = keys.get(com-1);
+                    Teacher teacher = Hogwarts.allTeachers.get(uuid);
+                    System.out.println("Write your comment:");
+                    Scanner in1 = new Scanner(System.in);
+                    String comment = in1.nextLine();
+                    Hogwarts.addComment(teacher,comment);
+                    System.out.println("Thanks for leave a comment.\n" +
+                            "it will show to the user without your name being specified!");
+                } else {
+                    System.out.println("You entered a wrong number!\n");
+                }
+            } else if (choose == 7) {
                 System.out.println("Username : " + student.getUsername());
                 System.out.println("1.Change username\t2.Change Password");
                 int in = input.nextInt();
@@ -532,7 +707,7 @@ public class Main {
                 } else {
                     System.out.println("You entered the wrong number!\n");
                 }
-            } else if (choose == 7) {
+            } else if (choose == 8) {
                 break;
             } else {
                 System.out.println("You entered the wrong number!\n");

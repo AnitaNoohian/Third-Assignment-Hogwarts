@@ -34,5 +34,24 @@ public class Hogwarts {
     public void addStudents(Student student){
         allStudents.put(student.getAccountID(),student);
     }
+    public void rateTeacher(){
 
+    }
+    public static void addComment(Teacher teacher,String comment){
+        teacher.comments.add(comment);
+    }
+    public static List<String> showComment(Teacher teacher){
+        return teacher.comments;
+    }
+    public static void addRate(Teacher teacher, UUID uuid, int score){
+        int rate = 0;
+        if (teacher.rates.get(uuid) != null) {
+            rate = teacher.rates.get(uuid);
+        }
+        rate += score;
+        teacher.rates.put(uuid, rate/2);
+    }
+    public static Integer showRate(Teacher teacher, UUID uuid){
+        return teacher.rates.get(uuid);
+    }
 }

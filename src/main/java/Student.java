@@ -23,7 +23,7 @@ public class Student extends Account {
         }
         return coursesName;
     }
-    public List<String> getTeachers(){
+    public List<String> getTeachers() {
         List<String> teacher = new ArrayList<>();
         for (String value : teachers.values()){
             teacher.add(value);
